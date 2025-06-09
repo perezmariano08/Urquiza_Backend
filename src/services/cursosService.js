@@ -15,10 +15,12 @@ module.exports.getCursos = async () => {
                     WHEN COUNT(ac.id_alumno) = 1 THEN '1 alumno/a'
                     ELSE CONCAT(COUNT(ac.id_alumno), ' alumnos/as')
                 END AS CHAR
-            ) AS cantidad_alumnos
+            ) AS cantidad_alumnos,
+            CONCAT(d.nombre, " ", d.apellido) as docente
         FROM cursos c
         INNER JOIN grados g ON g.id_grado = c.id_grado
         LEFT JOIN alumnos_cursos ac ON ac.id_curso = c.id_curso
+        LEFT JOIN docentes d ON d.id_docente = c.id_docente
         GROUP BY c.id_curso, c.id_grado, g.grado, g.abreviacion, c.division, c.turno, c.ciclo_lectivo;
     `);
     return rows;
@@ -28,6 +30,7 @@ module.exports.getCursosAlumno = async (id_alumno) => {
     try {
         const [rows] = await db.query(
             `SELECT
+                ac.id_curso,
                 ac.id_alumno,
                 g.grado,
                 g.abreviacion,

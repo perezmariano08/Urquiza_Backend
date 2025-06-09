@@ -7,7 +7,19 @@ const pool = mysql.createPool({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
     waitForConnections: true,
-    connectionLimit: 10
+    connectionLimit: 10,
+    connectTimeout: 10000 // <-- esto evita cuelgues largos
 });
+
+// Probar conexión al iniciar
+(async () => {
+    try {
+        const conn = await pool.getConnection();
+        console.log('✅ Conexión a la base de datos exitosa');
+        conn.release();
+    } catch (error) {
+        console.error('❌ Error al conectar con la base de datos:', error.message);
+    }
+})();
 
 module.exports = pool;

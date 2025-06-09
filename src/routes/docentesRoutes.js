@@ -1,7 +1,10 @@
 const express = require('express');
-const { getDocentesController } = require('../controllers/docentesController');
+const { getDocentesController, getAsistenciasDocenteController } = require('../controllers/docentesController');
 const router = express.Router();
 
-router.get('/:id', getDocentesController);
+router.get('/asistencias/:id_docente', getAsistenciasDocenteController);       // Para obtener todos los docentes
+router.get('/', getDocentesController);       // Para obtener todos los docentes
+router.get('/:id', getDocentesController);    // Para obtener uno por ID
+
 
 module.exports = router;
